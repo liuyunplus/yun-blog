@@ -1,27 +1,31 @@
 <template>
-  <div class="post">
+  <div id="post">
+    <h2>{{ post_title }}</h2>
     <div v-html="post_html" v-highlight></div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import * as global from '../utils/global'
 
 export default {
-  name: 'PostCom',
-  props: {
-    post_url: String
-  },
+  name: 'Post',
   mounted() {
-    let title = this.$route.query.title
-    let post_url = "https://raw.githubusercontent.com/liuyunplus/my-test/main/html/" + title + ".html"
+    this.post_title = this.$route.query.title
+    let post_url = `https://raw.githubusercontent.com/liuyunplus/yun-blog-data/main/html/${this.post_title}.html`
     let vue = this
     axios.get(post_url).then(function (response) {
       vue.post_html = response.data
+      //渲染数学公式
+      vue.$nextTick().then(()=>{
+        global.renderByMathjax(document.getElementById('post'))
+      });
     })
   },
   data() {
     return {
+      post_title: "",
       post_html: ""
     }
   }
@@ -29,6 +33,18 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "src/assets/style/global";
+@import "../assets/style/global";
 
+code {
+  font-size: 16px;
+}
+
+figure {
+  margin-inline-end: 0px;
+  margin-inline-start: 0px;
+}
+
+h2 {
+  text-align: center;
+}
 </style>

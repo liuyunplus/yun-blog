@@ -14,6 +14,16 @@ const routes = [
         name: 'Post',
         path: '/post',
         component: ()=> import('@/pages/Post'),
+    },
+    {
+        name: 'Category',
+        path: '/category',
+        component: ()=> import('@/pages/Category'),
+    },
+    {
+        name: 'About',
+        path: '/about',
+        component: ()=> import('@/pages/About'),
     }
 ]
 

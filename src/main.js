@@ -8,7 +8,6 @@ import 'highlight.js/styles/base16/tomorrow-night.css'
 const app = createApp(App)
 app.use(router)
 app.use(store)
-
 // 自定义一个代码高亮指令
 app.directive('highlight', function (el) {
     const blocks = el.querySelectorAll('pre code')

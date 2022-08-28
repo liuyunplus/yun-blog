@@ -1,21 +1,14 @@
-@body-width: 900px;
-@header-height: 65px;
-@footer-height: 40px;
-
 body {
   font-family: "Open Sans", "Clear Sans", "Helvetica Neue", Helvetica, Arial, 'Segoe UI Emoji', sans-serif;
   font-size: 18px;
   margin: 0px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
+
 a {
   text-decoration: none;
-}
-code {
-  font-size: 16px;
-}
-figure {
-  margin-inline-end: 0px;
-  margin-inline-start: 0px;
 }
 img {
   width: 100%;
@@ -29,6 +22,7 @@ table {
   margin: 15px auto; /*外边距*/
   border-collapse: collapse; /*使用单一线条的边框*/
   empty-cells: show; /*单元格无内容依旧绘制边框*/
+
   th {
     height: 35px; /*统一每一行的默认高度*/
     border: 1px solid #dedede; /*内部边框样式*/
@@ -38,22 +32,23 @@ table {
     background: rgba(223, 226, 229, 0.4); /*背景色*/
     white-space: nowrap; /*表头内容强制在一行显示*/
   }
+
   td {
     height: 35px; /*统一每一行的默认高度*/
     border: 1px solid #dedede; /*内部边框样式*/
     padding: 0 10px; /*内边距*/
   }
+
   tbody tr:nth-child(2n) {
     background: rgba(223, 226, 229, 0.3);
   }
+
   tr:hover {
     background: #efefef;
   }
 }
-.table-area {
-  overflow: auto;
-}
-// 引用块的样式
+
+// 引用块样式
 blockquote {
   color: rgb(119, 119, 119);
   background: #f9f9f9;
@@ -61,6 +56,7 @@ blockquote {
   margin: 10px 0px;
   padding: 10px 10px;
 }
+
 blockquote:before {
   color: #ccc;
   font-size: 4em;
@@ -68,6 +64,7 @@ blockquote:before {
   margin-right: 0.25em;
   vertical-align: -0.4em;
 }
+
 blockquote p {
   display: inline;
 }

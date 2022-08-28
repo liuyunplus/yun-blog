@@ -1,9 +1,7 @@
 <template>
-  <div id="app">
-    <Header></Header>
-    <router-view></router-view>
-    <Footer></Footer>
-  </div>
+  <Header></Header>
+  <router-view></router-view>
+  <Footer></Footer>
 </template>
 
 <script>
@@ -29,14 +27,13 @@ export default {
 </script>
 
 <style lang="less">
-@import "assets/style/global.less";
+@import "assets/style/global";
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
   width: 950px;
   margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 </style>

@@ -1,32 +1,52 @@
 <template>
   <div class="header">
-
+    <div class="header-left">
+      <router-link to="/home">我的博客</router-link>
+    </div>
+    <div class="header-right">
+      <router-link to="/home">首页</router-link>
+      <span style="width: 5px; display: inline-block"/>
+      <router-link to="/category">分类</router-link>
+      <span style="width: 5px; display: inline-block"/>
+      <router-link to="/about">关于</router-link>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'HeaderCom'
+  name: 'Header'
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
+<style lang="less" scoped>
+.header {
+  width: 950px;
+  height: 60px;
+  background-color: #6699cc;
+  margin: 0px auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
 
-ul {
-  list-style-type: none;
-  padding: 0;
-}
+  .header-left {
+    font-size: 26px;
+  }
 
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
+  .header-right {
+    font-size: 18px;
+    text-align: right;
+  }
 
-a {
-  color: #42b983;
+  a {
+    color: black;
+    cursor: pointer;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
 }
 </style>
