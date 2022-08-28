@@ -1,26 +1,42 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <Header></Header>
+    <router-view></router-view>
+    <Footer></Footer>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import axios from "axios";
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Header, Footer
+  },
+  created() {
+    let postList = this.$store.state.postList;
+    if (postList == null) {
+      let vue = this
+      axios.get('https://6309e32a32499100327d2bfb.mockapi.io/post').then(function (response) {
+        vue.$store.commit("setPostList", response.data)
+      })
+    }
   }
 }
 </script>
 
-<style>
+<style lang="less">
+@import "assets/style/global.less";
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  width: 950px;
+  margin: 0 auto;
 }
 </style>
