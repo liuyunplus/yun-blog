@@ -28,8 +28,10 @@ export default {
 
 <style lang="less">
 @import "assets/style/global";
+@import "assets/fonts/font.css";
 
 #app {
+  font-family: 'LXGWWenKai-Regular';
   width: 950px;
   margin: 0 auto;
   min-height: 100vh;

@@ -40,10 +40,6 @@ a {
   color: #2c3e50;
 }
 
-#app .post-group:nth-of-type(1) {
-  background-color: #a3685a;
-}
-
 .post-group {
   display: flex;
   margin-bottom: 20px;
