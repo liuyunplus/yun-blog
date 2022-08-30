@@ -11,16 +11,12 @@
 </template>
 
 <script>
-import axios from 'axios'
+import postMap from '../assets/meta/PostMap.json';
 
 export default {
   name: 'Home',
   mounted() {
-    let vue = this
-    axios.get('https://raw.githubusercontent.com/liuyunplus/yun-blog-data/main/meta/postMap.json').then(function (response) {
-      vue.postMap = response.data
-      vue.$store.commit("setPostList", response.data);
-    })
+    this.postMap = postMap
   },
   data() {
     return {

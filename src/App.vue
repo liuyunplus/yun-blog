@@ -28,7 +28,7 @@ export default {
 
 <style lang="less">
 @import "assets/style/global";
-@import "assets/fonts/font.css";
+@import "assets/font/font.css";
 
 #app {
   font-family: 'LXGWWenKai-Regular';

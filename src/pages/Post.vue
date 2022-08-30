@@ -6,22 +6,18 @@
 </template>
 
 <script>
-import axios from "axios";
 import * as global from '../utils/global'
 
 export default {
   name: 'Post',
   mounted() {
     this.post_title = this.$route.query.title
-    let post_url = `https://raw.githubusercontent.com/liuyunplus/yun-blog-data/main/html/${this.post_title}.html`
-    let vue = this
-    axios.get(post_url).then(function (response) {
-      vue.post_html = response.data
-      //渲染数学公式
-      vue.$nextTick().then(()=>{
-        global.renderByMathjax(document.getElementById('post'))
-      });
-    })
+    this.post_html = require(`../assets/html/${this.post_title}.html`).default
+    //渲染数学公式
+    this.$nextTick().then(()=>{
+      console.log("开始渲染")
+      global.renderByMathjax(document.getElementById('post'))
+    });
   },
   data() {
     return {
