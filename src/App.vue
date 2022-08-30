@@ -1,6 +1,8 @@
 <template>
   <Header></Header>
-  <router-view></router-view>
+  <div class="main">
+    <router-view></router-view>
+  </div>
   <Footer></Footer>
 </template>
 
@@ -28,10 +30,9 @@ export default {
 
 <style lang="less">
 @import "assets/style/global";
-@import "assets/font/font.css";
+@import "assets/font/font";
 
 #app {
-  font-family: 'LXGWWenKai-Regular';
   width: 950px;
   margin: 0 auto;
   min-height: 100vh;

@@ -1,14 +1,14 @@
 <template>
   <div class="header">
     <div class="header-left">
-      <router-link to="/home">我的博客</router-link>
+      <router-link to="/home">Yun's Blog</router-link>
     </div>
     <div class="header-right">
-      <router-link to="/home">首页</router-link>
-      <span style="width: 5px; display: inline-block"/>
-      <router-link to="/category">分类</router-link>
-      <span style="width: 5px; display: inline-block"/>
-      <router-link to="/about">关于</router-link>
+      <router-link to="/home">Home</router-link>
+      <span style="width: 10px; display: inline-block"/>
+<!--      <router-link to="/category">Category</router-link>-->
+<!--      <span style="width: 10px; display: inline-block"/>-->
+      <router-link to="/about">About</router-link>
     </div>
   </div>
 </template>
@@ -22,8 +22,8 @@ export default {
 <style lang="less" scoped>
 .header {
   width: 950px;
-  height: 60px;
-  background-color: #6699cc;
+  height: 80px;
+  //background-color: #6699cc;
   margin: 0px auto;
   display: flex;
   justify-content: space-between;
@@ -31,7 +31,7 @@ export default {
   box-sizing: border-box;
 
   .header-left {
-    font-size: 26px;
+    font-size: 32px;
   }
 
   .header-right {
