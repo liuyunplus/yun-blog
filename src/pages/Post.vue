@@ -1,6 +1,6 @@
 <template>
   <div id="post">
-    <h2>{{ post_title }}</h2>
+    <div class="title">{{ post_title }}</div>
     <div v-html="post_html" v-highlight></div>
   </div>
 </template>
@@ -31,16 +31,14 @@ export default {
 <style lang="less" scoped>
 @import "../assets/style/global";
 
-code {
-  font-size: 16px;
+.title {
+  font-size: 1.75em;
+  text-align: center;
+  margin-bottom: 0.4em;
 }
 
 figure {
   margin-inline-end: 0px;
   margin-inline-start: 0px;
-}
-
-h2 {
-  text-align: center;
 }
 </style>
