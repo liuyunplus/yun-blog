@@ -1,23 +1,48 @@
 body {
   font-family: "Open Sans", "Clear Sans", "Helvetica Neue", Helvetica, Arial, 'Segoe UI Emoji', sans-serif;
-  font-size: 18px;
+  font-size: 1.12rem;
   margin: 0px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
+p, blockquote, ul, ol, dl, table {
+  margin: 0.8em 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  line-height: 1.4;
+  cursor: text;
+}
+
+h1 {
+  font-size: 2.25em;
+}
+
+h2 {
+  font-size: 1.75em;
+}
+
+h3 {
+  font-size: 1.5em;
+}
+
 h4 {
-  font-size: 20px;
+  font-size: 1.25em;
 }
 
 h5 {
-  font-size: 18px;
+  font-size: 1em;
 }
 
 a {
   text-decoration: none;
 }
+
 img {
   width: 100%;
 }
@@ -58,11 +83,11 @@ table {
 
 // 引用块样式
 blockquote {
-  color: rgb(119, 119, 119);
+  color: #777777;
   background: #f9f9f9;
-  border-left: 5px solid #ccc;
+  border-left: 4px solid #dfe2e5;
   margin: 10px 0px;
-  padding: 10px 10px;
+  padding: 2px 0px;
 }
 
 blockquote:before {
