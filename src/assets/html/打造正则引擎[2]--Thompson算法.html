@@ -1,5 +1,6 @@
+<h4 id="1-前言">1. 前言</h4>
 <p>形式语言作为基于特定字符集的字符串集合，需要有某种明确的标准来定义一个字符串是否是它的元素，这可以通过形式文法，正则表达式，有穷自动机等多种表示方法来完成。其中正则表达式是一种具有高度概括性的表示方法，能够用简洁的语法来描述庞大的字符串集合，它的作用是用来简化人们的编码工作。而在计算机中是使用有穷自动机来描述形式语言的，它是一种基于事件驱动的状态转移图，具有和正则表达式相同的表达能力。根据状态转移的性质，有穷自动机分为不确定有穷自动机和确定有穷自动机，本文会先对有穷自动机进行基本介绍，然后介绍一种能够将正则表达式编译成不确定有穷自动机的算法。</p>
-<h4 id="1-有穷自动机">1 有穷自动机</h4>
+<h4 id="2-有穷自动机">2. 有穷自动机</h4>
 <p>有穷自动机是一种抽象数学模型，它可以根据外部输入来改变自身的状态，从而达到模拟和控制执行流的目的。有穷自动机由五个部分组成，可以用一个五元组 $(S，\Sigma，s，F，\delta)$ 来表示，其中各部分的含义如下所示：</p>
 <p>$S$：表示一个有穷状态集合。</p>
 <p>$\Sigma$：表示一个输入符号集合。</p>
@@ -66,37 +67,37 @@
 <td>少</td>
 </tr>
 </tbody></table>
-<h4 id="2-thompson算法概述">2 Thompson算法概述</h4>
+<h4 id="3-thompson算法概述">3. Thompson算法概述</h4>
 <p>上一篇文章中我们讨论过复杂正则表达式可以由简单正则表达式通过并集，连接，闭包等基础运算构造而成，Thompson算法就是利用这种归纳思想来将一个正则表达式转化成为一个等价的NFA的，该算法通过递归地将一个正则表达式划分成构成它的子表达式，在得到每个子表达式对应的NFA之后，根据子表达式之间的运算关系和一系列规则来构造表达式自身对应的NFA。下面分别描述通过子表达式NFA构造自身NFA的运算规则。</p>
-<p>1）最小NFA构造</p>
+<h5 id="31-最小nfa构造">3.1 最小NFA构造</h5>
 <p>假设 $r_1=\epsilon，r_2=a$，代表 $r_1$ 的NFA如图1-4左侧所示，代表 $r_2$ 的NFA如图1-4右侧所示。这里空串 $\epsilon$ 和单个字符 $a$ 都是最小的正则表达式，因此无需继续递归，通过它们构造NFA的规则是：新建一个开始状态 $i$ 和一个接受状态 $f$，将这两个状态直接相连，标号可以是空串 $\epsilon$ 或者单个字符，由此得到的NFA只有一次状态转换。</p>
 <figure>
   <img src="https://raw.githubusercontent.com/liuyunplus/yun-blog-builder/main/post/image/1f9b0db6540d11ec9b7cacde48001122.png" />
   <figcaption style="text-align: center;font-size:14px;color:#C0C0C0" >图 1-4</figcaption>
 </figure>
+##### 3.2 并集运算
 
-<p>2）并集运算</p>
 <p>假设 $r=s|t$， $r$ 的NFA即 $N(r)$ 可以通过图1-5构造得到。这里 $i$ 和 $f$ 是新状态，分别是 $N(r)$ 的开始状态和接受状态。从 $i$ 到 $N(s)$ 和 $N(t)$ 的开始状态各有一个 $\epsilon$ 转换，从 $N(s)$ 和 $N(t)$ 到接受状态 $f$ 也各有一个 $\epsilon$ 转换。请注意，$N(s)$ 和 $N(t)$ 的接受状态在 $N(r)$ 中不是接受状态。因为从 $i$ 到 $f$ 的任何路径要么只通过 $N(s)$，要么只通过 $N(t)$ ，且离开 $i$ 或进入 $f$ 的 $\epsilon$ 转换都不会改变路径上的标号，因此我们可以判定 $N(r)$ 可以识别的串集合是 $L(s)\cup L(t)$。</p>
 <figure>
   <img src="https://raw.githubusercontent.com/liuyunplus/yun-blog-builder/main/post/image/1f9b4448540d11ec9b7cacde48001122.png" />
   <figcaption style="text-align: center;font-size:14px;color:#C0C0C0" >图 1-5</figcaption>
 </figure>
+##### 3.3 连接运算
 
-<p>3）连接运算</p>
 <p>假设 $r=st$，$r$ 的NFA即 $N(r)$ 可以通过图1-6构造得到。$N(s)$ 的开始状态变成了 $N(r)$ 的开始状态。$N(t)$ 的接受状态成为 $N(r)$ 的唯一接受状态。$N(s)$ 的接受状态和 $N(t)$ 的开始状态合并为一个状态，合并后的状态拥有原来进入和离开合并前的两个状态的全部转换。一条从 $i$ 到 $f$ 的路径必须首先经过 $N(s)$，因此这条路径的标号以 $L(s)$ 中的某个串开始。然后，这条路径继续通过 $N(t)$，因此这条路径的标号以 $L(t)$ 中的某个串结束。所以 $N(r)$ 可以识别的串恰好是 $L(s)L(t)$。</p>
 <figure>
   <img src="https://raw.githubusercontent.com/liuyunplus/yun-blog-builder/main/post/image/1f9b7f76540d11ec9b7cacde48001122.png" />
   <figcaption style="text-align: center;font-size:14px;color:#C0C0C0" >图 1-6</figcaption>
 </figure>
+##### 3.4 闭包运算
 
-<p>4）闭包运算</p>
 <p>假设 $r=s^*$，$r$ 的NFA即 $N(r)$ 可以通过图1-7构造得到。这里 $i$ 和 $f$ 是两个新状态，分别是 $N(r)$ 的开始状态和接受状态。要从 $i$ 到达 $f$，我们可以沿着新引入的标号为 $\epsilon$ 的路径前进，这个路径对应于 $L(s)^0$ 中的一个串。我们也可以到达 $N(s)$ 的开始状态，然后经过该NFA，再零次或多次从它的接受状态回到它的开始状态并重复上述过程。这些选项使得 $N(r)$ 可以接受$L(s)^1$、$L(s)^2$ 等集合中的所有串，因此 $N(r)$ 可以识别的所有串的集合就是 $L(s)^*$。</p>
 <figure>
   <img src="https://raw.githubusercontent.com/liuyunplus/yun-blog-builder/main/post/image/1f9bb5d6540d11ec9b7cacde48001122.png" />
   <figcaption style="text-align: center;font-size:14px;color:#C0C0C0" >图 1-7</figcaption>
 </figure>
 
-<h4 id="3-thompson算法实现">3 Thompson算法实现</h4>
+<h4 id="4-thompson算法实现">4. Thompson算法实现</h4>
 <pre><code class="language-java">package com.liuyun.github.test;
 
 import java.util.ArrayList;

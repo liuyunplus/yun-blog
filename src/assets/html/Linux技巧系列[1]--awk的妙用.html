@@ -1,15 +1,16 @@
+<h4 id="1-写在前面">1. 写在前面</h4>
 <p>awk是Linux及Unix环境中现有的功能最强大的数据处理引擎之一，它提供了极其强大的功能：可以进行正则表达式匹配，数学运算符、控制流语句、进程控制语句甚至于内置的变量和函数。可以看到它具备了一个完整的语言所应具有的几乎所有精美特性。事实上awk就是隐藏在命令行里的编程语言，利用它我们可以很方便的实现数据排序、数据处理、报表生成以及其他许多强大的功能。</p>
-<h4 id="1-工作原理">1 工作原理</h4>
+<h4 id="2-工作原理">2. 工作原理</h4>
 <p>如下图所示，awk脚本由三部分组成，分别对应文本处理的三个步骤。其中BEGIN代码块会在处理文本前执行，中间代码块用于处理pattern表达式匹配到的文本行，而END代码块可以在文本处理完之后进行一些操作。这三个部分都是可选的，无论哪个代码块缺失，剩余的代码块都会按照文本处理流程得到执行。
 <img src="https://raw.githubusercontent.com/liuyunplus/yun-blog-builder/main/post/image/21656f2e540d11ec9b7cacde48001122.png" alt="1"></p>
-<h4 id="2-基本用法">2 基本用法</h4>
+<h4 id="3-基本用法">3. 基本用法</h4>
 <p>awk脚本可以直接通过参数传递给awk命令，如下所示，需要指明要处理的文件路径。</p>
 <pre><code class="language-bash">$ awk &#39;BEGIN{}pattern{commands}END{}&#39; file
 </code></pre>
 <p>若脚本比较复杂，也可以将脚本单独存放到一个文件中，然后使用 -f 参数指定脚本文件的位置。</p>
 <pre><code class="language-bash">$ awk -f 脚本文件 file
 </code></pre>
-<h4 id="3-内置变量">3 内置变量</h4>
+<h4 id="4-内置变量">4. 内置变量</h4>
 <table>
 <thead>
 <tr>
@@ -61,15 +62,14 @@
 李四 男 34 湖南 博士 算法工程师
 李丽 女 26 上海 本科 产品经理
 王五 男 29 广东 研究生 开发工程师
-</code></pre>
-<pre><code class="language-bash">$ cat demo2.txt
+$ cat demo2.txt
 姓名||性别||年龄||籍贯||学历||职位
 张三||男||25||江西||本科||开发工程师
 李四||男||34||湖南||博士||算法工程师
 李丽||女||26||上海||本科||产品经理
 王五||男||29||广东||研究生||开发工程师
 </code></pre>
-<p>1）只打印demo1文件的第1，2列的内容。</p>
+<p>(1) 只打印demo1文件的第1，2列的内容。</p>
 <pre><code class="language-bash">$ awk &#39;{print $1,$2}&#39; demo1.txt
 姓名 性别
 张三 男
@@ -78,7 +78,7 @@
 王五 男
 </code></pre>
 <p>说明：因为无需在处理文本前后做一些操作，所以省略BEGIN和END代码块。</p>
-<p>2）打印demo1文件每一行有多少列。</p>
+<p>(2) 打印demo1文件每一行有多少列。</p>
 <pre><code class="language-bash">$ awk &#39;{print NF}&#39; demo1.txt
 6
 6
@@ -86,7 +86,7 @@
 6
 6
 </code></pre>
-<p>3）打印demo1文件，并在每行前面加上编号。</p>
+<p>(3) 打印demo1文件，并在每行前面加上编号。</p>
 <pre><code class="language-bash">$ awk &#39;{print NR,$0}&#39; demo1.txt
 1 姓名 性别 年龄 籍贯 学历 职位
 2 张三 男 25 江西 本科 开发工程师
@@ -94,7 +94,7 @@
 4 李丽 女 26 上海 本科 产品经理
 5 王五 男 29 广东 研究生 开发工程师
 </code></pre>
-<p>4）只打印demo2文件的第1，3列的内容。</p>
+<p>(4) 只打印demo2文件的第1，3列的内容。</p>
 <pre><code class="language-bash">$ awk &#39;BEGIN{OFS=&quot;||&quot;}{print $1,$2}&#39; demo2.txt
 姓名 年龄
 张三 25
@@ -103,7 +103,7 @@
 王五 29
 </code></pre>
 <p>说明：由于默认的列分割符是空格，因此需要在处理前指定新的列分割符。</p>
-<h4 id="4-模式匹配">4 模式匹配</h4>
+<h4 id="5-模式匹配">5. 模式匹配</h4>
 <p>有时候我们并不需要对每一行都进行处理，而只是需要处理特定的某些行。awk提供了非常强大的模式匹配工具，不仅可以通过正则表达式匹配，还可以通过运算符来匹配，或者通过结合二者来实现更为复杂的匹配。下面列出了可用的运算符列表。</p>
 <table>
   <tr><th>符号类型</th><th>符号</th><th>含义</th></tr>
@@ -119,27 +119,27 @@
   <tr><td>||</td><td>或</td></tr>
   <tr><td>!</td><td>非</td></tr>
 </table> 
-1）只打印包含李四的行。
+(1) 只打印包含李四的行。
 
 <pre><code class="language-bash">$ awk &#39;/李四/{print $0}&#39; demo1.txt
 李四 男 34 湖南 博士 算法工程师
 </code></pre>
-<p>2）只打印学历是本科的行。</p>
+<p>(2) 只打印学历是本科的行。</p>
 <pre><code class="language-bash">$ awk &#39;$5==&quot;本科&quot;{print $0}&#39; demo1.txt
 张三 男 25 江西 本科 开发工程师
 李丽 女 26 上海 本科 产品经理
 </code></pre>
-<p>3）只打印年龄小于30的行。</p>
+<p>(3) 只打印年龄小于30的行。</p>
 <pre><code class="language-bash">$ awk &#39;$3&lt;30{print $0}&#39; demo1.txt
 张三 男 25 江西 本科 开发工程师
 李丽 女 26 上海 本科 产品经理
 王五 男 29 广东 研究生 开发工程师
 </code></pre>
-<p>4）只打印年龄小于30并且学历不是本科的行。</p>
+<p>(4) 只打印年龄小于30并且学历不是本科的行。</p>
 <pre><code class="language-bash">$ awk &#39;$3&lt;30&amp;&amp;$5!=&quot;本科&quot;{print $0}&#39; demo1.txt
 王五 男 29 广东 研究生 开发工程师
 </code></pre>
-<h4 id="5-控制流语句">5 控制流语句</h4>
+<h4 id="6-控制流语句">6. 控制流语句</h4>
 <p>条件语句格式：</p>
 <pre><code class="language-bash"># 条件语句1
 if (条件) {
@@ -174,7 +174,7 @@ do {
   ...
 } while(条件)
 </code></pre>
-<p>1）计算下列同学的平均分数，并且只打印平均分大于90分的同学姓名和平均分。</p>
+<p>(1) 计算下列同学的平均分数，并且只打印平均分大于90分的同学姓名和平均分。</p>
 <pre><code class="language-bash">$ cat demo3.txt
 小明 80 90 96 98
 李强 93 98 92 91
@@ -194,7 +194,7 @@ $ awk -f demo.awk demo3.txt
 李强 93.5
 刘琪 91
 </code></pre>
-<p>2）计算1+2+3+4+...+100的和，分别使用for，while，do-while循环实现。</p>
+<p>(2) 计算1+2+3+4+...+100的和，分别使用for，while，do-while循环实现。</p>
 <p>使用for循环实现：</p>
 <pre><code class="language-bash">$ cat for.awk
 BEGIN {
@@ -231,7 +231,7 @@ BEGIN {
 $ awk -f while.awk
 5050
 </code></pre>
-<h4 id="6-字符串函数">6 字符串函数</h4>
+<h4 id="7-字符串函数">7. 字符串函数</h4>
 <table>
 <thead>
 <tr>
@@ -286,29 +286,29 @@ $ awk -f while.awk
 <td>替换的个数</td>
 </tr>
 </tbody></table>
-<p>1）搜索字符串 &quot;I have a dream&quot; 中出现 &quot;ea&quot; 字符串的位置。</p>
+<p>(1) 搜索字符串 &quot;I have a dream&quot; 中出现 &quot;ea&quot; 字符串的位置。</p>
 <pre><code class="language-bash">$ awk &#39;BEGIN{str=&quot;I have a dream&quot;; location=index(str,&quot;ea&quot;); print location}&#39;
 12
 </code></pre>
-<p>2）将字符串 &quot;Hadoop is a bigdata Framework&quot; 全部转换为小写。</p>
+<p>(2) 将字符串 &quot;Hadoop is a bigdata Framework&quot; 全部转换为小写。</p>
 <pre><code class="language-bash">$ awk &#39;BEGIN{str=&quot;Hadoop is a bigdata Framework&quot;; print tolower(str)}&#39;
 hadoop is a bigdata framework
 </code></pre>
-<p>3）搜索字符串 &quot;I got 90 on the test&quot; 第一个数字出现的位置。</p>
+<p>(3) 搜索字符串 &quot;I got 90 on the test&quot; 第一个数字出现的位置。</p>
 <pre><code class="language-bash">$ awk &#39;BEGIN{str=&quot;I got 90 on the test&quot;; location=match(str,/[0-9]/); print location}&#39;
 7
 </code></pre>
-<p>4）截取字符串 &quot;I got 90 on the test&quot; 的子串，截取条件是从第3个字符开始，截取6位。</p>
+<p>(4) 截取字符串 &quot;I got 90 on the test&quot; 的子串，截取条件是从第3个字符开始，截取6位。</p>
 <pre><code class="language-bash">$ awk &#39;BEGIN{str=&quot;I got 90 on the test&quot;; print substr(str,3,6)}&#39;
 got 90
 </code></pre>
-<p>5）替换字符串 &quot;I got 90 on the test&quot; 中第一个匹配到的数字串为@符号。</p>
+<p>(5) 替换字符串 &quot;I got 90 on the test&quot; 中第一个匹配到的数字串为@符号。</p>
 <pre><code class="language-bash">$ awk &#39;BEGIN{str=&quot;I got 90 on the test&quot;; sub(/[0-9]+/,&quot;@&quot;,str); print str}&#39;
 I got @ on the test
 </code></pre>
-<h4 id="7-综合示例">7 综合示例</h4>
+<h4 id="8-综合示例">8. 综合示例</h4>
 <p>日常项目中使用到Mybatis作为ORM框架时，我们会遇到根据Java类生成Mysql建表语句的场景，为了减少重复劳动，我们可以通过任意语言来实现这种需求，而使用awk脚本可以用非常少的代码量就能实现此类需求。</p>
-<p>1）新建脚本文件create_table.awk，文件内容如下：</p>
+<p>(1) 新建脚本文件create_table.awk，文件内容如下</p>
 <pre><code class="language-bash">function getUnderScore(str) {
     gsub(/;/, &quot;&quot;, str)
     while(match(str, /[A-Z]/)) {
@@ -371,7 +371,7 @@ END{
     printf(&quot;) ENGINE=InnoDB DEFAULT CHARSET=utf8;\n&quot;)
 }
 </code></pre>
-<p>2）新建测试文件Product.java，文件内容如下：</p>
+<p>(2) 新建测试文件Product.java，文件内容如下</p>
 <pre><code class="language-java">public class Product {
     private Long id;
     private String productName;
@@ -380,7 +380,7 @@ END{
     private Date createTime;
 }
 </code></pre>
-<p>3）执行create_table.awk脚本，输出结果如下：</p>
+<p>(3) 执行create_table.awk脚本，输出结果如下</p>
 <pre><code class="language-bash">$ awk -f create_table.awk Product.java
 DROP TABLE `product`;
 CREATE TABLE `product` (
@@ -392,5 +392,5 @@ CREATE TABLE `product` (
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 </code></pre>
-<h4 id="8-总结">8 总结</h4>
+<h4 id="9-总结">9. 总结</h4>
 <p>本文我们详细介绍了awk这门工具的基本使用，了解了awk的工作原理，知道了它所擅长的一些领域。其实描述awk为Linux环境下的命令行工具并不准确，它其实是一门编程语言，它不仅有内置的变量和函数，还具有流程控制语句，甚至我们可以自定义变量和函数。它的语法参照了C语言的编程风格，而且具有强大的动态类型推导能力，因此它比shell脚本更易于编程。确实，在很多方面可以用awk脚本来替代shell脚本帮助我们完成一些自动化的事情，因此熟练掌握好awk可以有效的提升我们的工作效率。</p>
