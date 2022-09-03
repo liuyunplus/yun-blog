@@ -3,109 +3,93 @@ const fs = require('fs')
 const marked = require('marked')
 
 let BLOG_PATH = "/Users/liuyun/Desktop/yun-notes/11-个人博客"
+let HTML_FOLDER = "assets/html"
+let META_FOLDER = "assets/meta"
+
 
 /**
- * 解析文章数据
- * @returns
+ * 解析文章元数据列表
+ * @param blogPath
+ * @returns {[]}
  */
-function parsePostData(filePath) {
-    let fileStat = fs.statSync(filePath);
-    let fileName = path.basename(filePath)
-    //如果不是Markdown文件，则不进行解析
-    if (!fileStat.isFile || !/\.md$/.test(fileName)) {
-        return null;
-    }
-    let postData = {}
-    const fileContent = fs.readFileSync(filePath, 'utf8');
-    //分割成每一行
-    let lineList = fileContent.split(/\n/);
-    let [postMeta, postText] = parsePostMeta(lineList);
-    postData["postMeta"] = postMeta;
-    postData["postText"] = postText;
-    return postData;
+function parsePostMetaList(blogPath) {
+    let postMetaList = []
+    fs.readdirSync(blogPath).forEach(function (fileName) {
+        let filePath = `${BLOG_PATH}/${fileName}`;
+        let postMeta = parsePostMeta(filePath);
+        if (postMeta) {
+            postMetaList.push(postMeta);
+        }
+    });
+    return postMetaList
 }
 
 /**
  * 解析文章元数据
  * @returns
  */
-function parsePostMeta(lineList) {
-    let postMeta = {};
-    let tagNum = 0;
-    let lineNo = 0;
-    for (let line of lineList) {
-        lineNo++;
-        if (line == "---") {
-            tagNum++;
-        }
-        //解析到第2个标记行时就不再向下解析
-        if (tagNum == 2) {
-            break;
-        }
-        let isMeta = (tagNum == 1 && line != "---");
-        if (isMeta) {
-            let metaName = line.substr(0, line.indexOf(':'));
-            let metaValue = line.substr(line.indexOf(':') + 1).trim()
-            //去除首尾两端的引号
-            metaValue = metaValue.replace(/^ *\'|\' *$/g, '')
-            postMeta[metaName] = metaValue;
-        }
+function parsePostMeta(filePath) {
+    let fileStat = fs.statSync(filePath);
+    let fileName = path.basename(filePath)
+    //如果不是Markdown文件，则不进行解析
+    if (!fileStat.isFile || !/\.md$/.test(fileName)) {
+        return null;
     }
-    //获取文章正文文本
-    lineList.splice(0, lineNo);
-    let postText = lineList.join("\n");
-    return [postMeta, postText];
+    const fileContent = fs.readFileSync(filePath, 'utf8');
+    let metaText = /---([^]*?)---/m.exec(fileContent)[1].replace(/^(\s*|\n*)|(\n*|\s*)$/g, '')
+    let postMeta = {};
+    for (const meteLine of metaText.split("\n")) {
+        if (meteLine.length == 0) {
+            continue
+        }
+        let metaName = meteLine.split(":")[0].replace(/^\s*|\s*$/g, '')
+        let metaValue = meteLine.split(":")[1].replace(/^\s*|\s*$/g, '')
+        postMeta[metaName] = metaValue;
+    }
+    postMeta.content = fileContent.replace(/---([^]*?)---/m, "").replace(/^(\s*|\n*)|(\n*|\s*)$/g, '')
+    return postMeta;
 }
 
 /**
  * 渲染文章页
  * @returns
  */
-function renderPostPage(postList) {
-    let postMetaList = []
-    for (let postData of postList) {
-        //获取文章的元数据
-        let postMeta = postData["postMeta"];
-        postMetaList.push(postMeta);
-        //获取文章Markdown文本
-        let postText = postData["postText"];
-        //将Markdown文本转换成HTML
-        let postHtml = marked.parse(postText)
-        //写入目标文件
-        fs.writeFileSync(`assets/html/${postMeta["title"]}.html`, postHtml)
+function renderPostPage(postMetaList) {
+    //生成HTML文件
+    for (let postMeta of postMetaList) {
+        //获取文章标题
+        let postTitle = postMeta.title;
+        //获取文章内容
+        let postContent = postMeta.content;
+        //将MD转换成HTML
+        let postHtml = marked.parse(postContent);
+        fs.writeFileSync(`${HTML_FOLDER}/${postTitle}.html`, postHtml)
     }
-    handMetaData(postMetaList)
+    //生成元数据文件
+    generatePostMap(postMetaList)
     return true;
 }
 
-function handMetaData(postMetaList) {
+function generatePostMap(postMetaList) {
+    //按时间倒序排序
     postMetaList.sort((a, b) => Date.parse(b.date) - Date.parse(a.date))
-    let postMap = postMetaList.reduce((map, post) => {
-        let year = parseInt(post.date.split("-")[0])
+    //按年份进行分组
+    let postYearMap = postMetaList.reduce((map, postMeta) => {
+        postMeta.content = null;
+        let year = parseInt(postMeta.date.split("-")[0])
         if (map[year]) {
-            map[year].push(post);
+            map[year].push(postMeta);
         } else {
-            map[year] = [post];
+            map[year] = [postMeta];
         }
         return map;
     }, {})
-    fs.writeFileSync(`assets/meta/PostMap.json`, JSON.stringify(postMap))
+    fs.writeFileSync(`${META_FOLDER}/PostMap.json`, JSON.stringify(postYearMap))
 }
 
 
-function runBuild() {
-    let postList = []
-    fs.readdirSync(BLOG_PATH).forEach(function (fileName) {
-        let filePath = `${BLOG_PATH}/${fileName}`;
-        let postData = parsePostData(filePath);
-        if (postData) {
-            postList.push(postData);
-        }
-    });
-    //渲染文章页
-    renderPostPage(postList);
-}
-
-
-runBuild();
+//获取文章列表
+let postMetaList = parsePostMetaList(BLOG_PATH);
+//渲染HTML页面
+renderPostPage(postMetaList);
 
