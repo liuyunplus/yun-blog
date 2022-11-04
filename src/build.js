@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs')
 const marked = require('marked')
 
-let BLOG_PATH = "/Users/liuyun/Desktop/yun-notes/02-个人博客"
+let BLOG_PATH = "assets/post"
 let HTML_FOLDER = "assets/html"
 let META_FOLDER = "assets/meta"
 

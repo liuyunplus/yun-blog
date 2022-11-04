@@ -15,7 +15,7 @@ $$</p>
 <p>在使用经典算法来统计RTT样本时会出现重传二义性的问题。所谓重传二义性问题是指，假设一个包的传输出现超时，该数据包会被重传，接着收到一个确认信息。那么该信息是对第一次还是第二次传输的确认就存在二义性。如果对重传数据包进行RTT样本统计，那么会出现下面两种情况。</p>
 <p>a）统计第一次发送和ACK到达时间的间隔，若此时的ACK是对第二次发送进行确认，那么RTT会偏大。</p>
 <p>b）统计第二次发送和ACK到达时间的间隔，若此时的ACK是对第一次发送进行确认，那么RTT会偏小。</p>
-<p><img src="https://raw.githubusercontent.com/liuyunplus/yun-blog-builder/main/post/image/21617b94540d11ec9b7cacde48001122.png" alt="1"></p>
+<p><img src="https://raw.githubusercontent.com/liuyunplus/yun-images/master/H9rQLA.png" alt="1"></p>
 <p>为了避免由于重传数据的RTT样本值的不准确而影响RTT平均估计值的统计，Karn算法做的第一部分是忽略重传的情况，也就是不对重传数据包进行采样。然而这样会导致另一个问题，就是如果出现网络突然抖动而产生较大延时，此时所有数据包都因超时而被重传，由于被重传的数据不纳入RTT样本统计，导致RTO仍然处于较小的值，此时会继续重传不必要的数据包而导致网络拥塞。Karn算法的第二部分是采用退避系数加倍来解决这个问题的，也就是说每当出现重传时RTO的值会进行翻倍。此方法虽然能解决上述问题，但也可能使TCP的传输性能降低，更好的方式是使用时间戳选项来避免重传二义性问题。</p>
 <h5 id="213-jacobson算法">2.1.3 Jacobson算法</h5>
 <p>$$
@@ -55,10 +55,10 @@ $$</p>
 </code></pre>
 <h4 id="3-快速重传">3. 快速重传</h4>
 <p>快速重传机制基于接收端的反馈信息来引发重传，而非重传计时器的超时。因此与超时重传相比，快速重传能够更加及时有效地修复丢包情况。典型的TCP同时实现了这两种重传机制。快速重传的工作原理是，当接收方收到一个失序的数据包时，会立即发送一个重复ACK，发送方在接收到一定数量的重复ACK后会重传之前的数据包。由于收到重复ACK并不代表数据包已经丢失，也有可能是网络中出现失序分组造成的，因此发送方需要等待收到的重复ACK数量达到一定阈值后才会进行重传。通常这个阈值会设置为3，也有些实现可以基于当前的失序程度来动态调整该阈值。具体的工作流程如下图所示。</p>
-<p><img src="https://raw.githubusercontent.com/liuyunplus/yun-blog-builder/main/post/image/2161bd34540d11ec9b7cacde48001122.png" alt="2"></p>
+<p><img src="https://raw.githubusercontent.com/liuyunplus/yun-images/master/q0kaHf.png" alt="2"></p>
 <h4 id="4-选择性重传">4. 选择性重传</h4>
 <p>虽然快速重传能够比超时重传更加及时的检测出是否存在丢包的情况，但无法确切得知是哪些数据包丢失了，因此可能会重传已经被正确接收的包，从而降低TCP的传输效率。例如上图中发送方连续收到3个重复的ACK，由于这些重复ACK可能是被报文段2之后的任意报文段所触发的，因此发送方不能确定是否需要重传报文段2之后的其他数据包。为了改善这种情况，TCP在头部引入了SACK选项。通过采用SACK选项，一个ACK可以包含三四个告知失序数据的SACK块信息，每个SACK块包含失序数据的起始序列号和终止序列号。因此，若不考虑拥塞控制的情况，利用SACK选项发送方最多能够在一个RTT时间内填补3个接收端的缓存空缺，从而有效的提升TCP的传输性能。具体工作原理如下图所示。</p>
-<p><img src="https://raw.githubusercontent.com/liuyunplus/yun-blog-builder/main/post/image/2161ecbe540d11ec9b7cacde48001122.png" alt="4"></p>
+<p><img src="https://raw.githubusercontent.com/liuyunplus/yun-images/master/IdtrNz.png" alt="4"></p>
 <h4 id="5-参考资料">5. 参考资料</h4>
 <blockquote>
 <ol>
