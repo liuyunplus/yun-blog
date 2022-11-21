@@ -81,9 +81,7 @@ a {
       justify-content: space-between;
       height: 46px;
       line-height: 46px;
-      border-bottom-width: 1px;
-      border-bottom-style: dashed;
-      border-bottom-color: rgb(125, 130, 138);
+      border-bottom: 1px dashed rgb(125, 130, 138);
     }
   }
 }
