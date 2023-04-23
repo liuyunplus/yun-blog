@@ -2,11 +2,6 @@ const path = require('path')
 const fs = require('fs')
 const marked = require('marked')
 
-let BLOG_PATH = "assets/post"
-let HTML_FOLDER = "assets/html"
-let META_FOLDER = "assets/meta"
-
-
 /**
  * 解析文章元数据列表
  * @param blogPath
@@ -88,8 +83,13 @@ function generatePostMap(postMetaList) {
 }
 
 
+let BLOG_PATH = "src/assets/post"
+let HTML_FOLDER = "src/assets/html"
+let META_FOLDER = "src/assets/meta"
+
 //获取文章列表
 let postMetaList = parsePostMetaList(BLOG_PATH);
 //渲染HTML页面
 renderPostPage(postMetaList);
+console.log("Build Success!")
 
