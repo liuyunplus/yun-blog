@@ -11,8 +11,8 @@ import * as global from '../utils/global'
 export default {
   name: 'Post',
   mounted() {
-    this.post_title = this.$route.query.title
-    this.post_html = require(`../assets/html/${this.post_title}.html`).default
+    this.post_id = this.$route.query.post_id
+    this.post_html = require(`../assets/html/${this.post_id}.html`).default
     //渲染数学公式
     this.$nextTick().then(()=>{
       console.log("开始渲染")

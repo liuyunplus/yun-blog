@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const marked = require('marked')
+const crypto = require('crypto');
 
 /**
  * 解析文章元数据列表
@@ -41,6 +42,7 @@ function parsePostMeta(filePath) {
         let metaValue = meteLine.split(":")[1].replace(/^\s*|\s*$/g, '')
         postMeta[metaName] = metaValue;
     }
+    postMeta.id = generateMD5(postMeta.title)
     postMeta.content = fileContent.replace(/---([^]*?)---/m, "").replace(/^(\s*|\n*)|(\n*|\s*)$/g, '')
     return postMeta;
 }
@@ -58,7 +60,7 @@ function renderPostPage(postMetaList) {
         let postContent = postMeta.content;
         //将MD转换成HTML
         let postHtml = marked.parse(postContent);
-        fs.writeFileSync(`${HTML_FOLDER}/${postTitle}.html`, postHtml)
+        fs.writeFileSync(`${HTML_FOLDER}/${postMeta.id}.html`, postHtml)
     }
     //生成元数据文件
     generatePostMap(postMetaList)
@@ -80,6 +82,12 @@ function generatePostMap(postMetaList) {
         return map;
     }, {})
     fs.writeFileSync(`${META_FOLDER}/PostMap.json`, JSON.stringify(postYearMap))
+}
+
+
+function generateMD5(text) {
+    const hash = crypto.createHash('md5').update(text).digest('hex');
+    return hash.padStart(32, '0');
 }
 
 

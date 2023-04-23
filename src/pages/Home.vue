@@ -3,7 +3,7 @@
     <div class="post-year">{{ year }}</div>
     <div class="post-list">
       <div v-for="post in postMap[year]" class="post-item">
-        <router-link :to="{name:'Post', query:{title: post.title}}">{{ post.title }}</router-link>
+        <router-link :to="{name:'Post', query:{post_id: post.id}}">{{ post.title }}</router-link>
         <span>{{ this.getPostDate(post.date) }}</span>
       </div>
     </div>
